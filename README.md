@@ -52,7 +52,7 @@ _ _ _ _
 #### Netlist
 >> *Representation of the design in terms of actual standard cells and their connections.*
 
-#### Lib file)
+#### Lib file
 >> *Liberty Timing file(.lib) consist of timing and power parameters associated with standard cells specific to a particular technology node. Generally it includes definition of an inverter, nand2, nand3, nand4, nor2, nor3, nor4, aoi12, aoi22, oai12, oai22, mux, dff etc.*
 
 **NOTE**
