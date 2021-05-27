@@ -41,6 +41,15 @@ _ _ _ _
 #### Introduction to verilog RTL Design and Synthesis ####
 
 > RTL Design
->> *It's a way of writng hdl code for digital design in a way to exploit the behavioral features offered by the language and also utilizing the structural description for design accuracy. So it's a trade off between behavioral constructs and structural description while writing hardware code.*        
+>> *It's a way of writng hdl code for digital design in a way to exploit the behavioral features offered by the language and also utilizing the structural description for design accuracy. So it's a trade off between behavioral constructs and structural description while writing hardware code.*   
+
+> Synthesis
+>> *Translation and optimization of the RTL code into the gate level netlist. The synthesis tool(yosys) takes hdl code, liberty file(.lib) and design constraints to generate gate level netlist.*
+
+> Netlist
+>> *Representation of the design in terms of actual standard cells and their connections.*
+
+> .lib
+>> *Liberty Timing file consist of timing and power parameters associated with standard cells specific to a particular technology node. Generally it includes definition of an inverter, nand2, nand3, nand4, nor2, nor3, nor4, aoi12, aoi22, oai12, oai22, mux, dff etc.*
 
 
