@@ -1,6 +1,5 @@
 # RTL Design, Synthesis and Optimization using Yosys and SKYWATER130 PDKs 
-![SkyWater_logo](https://user-images.githubusercontent.com/68396186/119770266-93b18f00-bed9-11eb-9937-8728a79a44f6.png)
-
+![SkyWater_logo](https://user-images.githubusercontent.com/68396186/119783113-86e96700-beea-11eb-9830-f5a102e1dbfb.png)
 
 
 In VLSI industry Front-end digital design inlcudes RTL design, synthesis, optimization and verification. In the current repository i have included the deisgn, synthesis and optimization work on various digital modules, from very simple digital logic (mux, decoder, encoder etc.) to complex designs(barrel shifter, booth multiplier, dual port ram etc). All the work has been done using open source tools:-
@@ -51,5 +50,6 @@ _ _ _ _
 
 > .lib
 >> *Liberty Timing file consist of timing and power parameters associated with standard cells specific to a particular technology node. Generally it includes definition of an inverter, nand2, nand3, nand4, nor2, nor3, nor4, aoi12, aoi22, oai12, oai22, mux, dff etc.*
+
 
 
