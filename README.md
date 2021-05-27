@@ -51,5 +51,15 @@ _ _ _ _
 > .lib
 >> *Liberty Timing file consist of timing and power parameters associated with standard cells specific to a particular technology node. Generally it includes definition of an inverter, nand2, nand3, nand4, nor2, nor3, nor4, aoi12, aoi22, oai12, oai22, mux, dff etc.*
 
+> yosys
+>> synthesis setup
+>>> ![yosys_setup](https://user-images.githubusercontent.com/68396186/119785659-0aa45300-beed-11eb-9854-00c44ba553fa.png)
+
+> iverilog
+>>  verification setup
+>>> ![verification_setup](https://user-images.githubusercontent.com/68396186/119786028-62db5500-beed-11eb-9988-e4f5ee933a4e.png)
+
+
+
 
 
