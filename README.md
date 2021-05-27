@@ -25,21 +25,35 @@ are committed to bring revolution in the Silicon industry.
 - - - -
 *I have categorized my work in day wise learning, according to the workshop conducted by VSD.*
 - - - -
-_ _ _ _
-## DAY01
-### Introduction to verilog RTL design and Synthesis 
+__Table of Contents__
+=================
 
->#### RTL_Design 
+  * [Day 01](#day-01)
+    * [Introduction to verilog RTL design and synthesis](#introduction-to-verilog-rtl-design-and-synthesis)
+        * [RTL Design](#rtl-design)
+        * [Synthesis](#synthesis)
+        * [Netlist](#netlist)
+        * [Lib file](#lib-file)
+    * [Synthesis using yosys](#synthesis-using-yosys)
+        * [Invoke yosys shell](#invoke-yosys-shell)
+        * [Commands for synthesis using yosys](#commands-for-synthesis-using-yosys)
+        * [Results](#results)
+  * [Day 02](#day-02)
+_ _ _ _
+## DAY 01
+### Introduction to verilog RTL design and synthesis 
+
+#### RTL Design 
 >> *It's a way of writng hdl code for digital design in a way to exploit the behavioral features offered by the language and also utilizing the structural description for design accuracy. So it's a trade off between behavioral constructs and structural description while writing hardware code.*   
 
->#### Synthesis
+#### Synthesis
 >> *Translation and optimization of the RTL code into the gate level netlist. The synthesis tool(yosys) takes hdl code, liberty file(.lib) and design constraints to generate gate level netlist.*
 
->#### Netlist
+#### Netlist
 >> *Representation of the design in terms of actual standard cells and their connections.*
 
->#### .lib
->> *Liberty Timing file consist of timing and power parameters associated with standard cells specific to a particular technology node. Generally it includes definition of an inverter, nand2, nand3, nand4, nor2, nor3, nor4, aoi12, aoi22, oai12, oai22, mux, dff etc.*
+#### Lib file)
+>> *Liberty Timing file(.lib) consist of timing and power parameters associated with standard cells specific to a particular technology node. Generally it includes definition of an inverter, nand2, nand3, nand4, nor2, nor3, nor4, aoi12, aoi22, oai12, oai22, mux, dff etc.*
 
 **NOTE**
 > Why Standard Cell library includes various(in terms of PPA) types of gate cells?
