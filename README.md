@@ -1,14 +1,46 @@
-# RTL Design, Synthesis and Optimization using Yosys and SKY130 PDKs 
+# RTL Design, Synthesis and Optimization using Yosys and SKYWATER130 PDKs 
+![SkyWater_logo](https://user-images.githubusercontent.com/68396186/119770266-93b18f00-bed9-11eb-9937-8728a79a44f6.png)
 
-In VLSI industry Front-end digital design inlcudes RTL design, synthesis, optimization and verification. In the current repository i have included the deisgn, synthesis and optimization work on various digital modules, from very simple digital logic (mux, decoder, encoder etc.) to complex designs(barrel shifter, booth multiplier, simple dual port ram etc). All the work have been done using open source tools:-
+
+
+In VLSI industry Front-end digital design inlcudes RTL design, synthesis, optimization and verification. In the current repository i have included the deisgn, synthesis and optimization work on various digital modules, from very simple digital logic (mux, decoder, encoder etc.) to complex designs(barrel shifter, booth multiplier, dual port ram etc). All the work has been done using open source tools:-
  * iverilog for RTL simulation.
- * gtkwave for reading vcd file and waveform generation.
+ * gtkwave for reading .vcd file and waveform generation.
  * yosys for synthesis and netlist generation.
  * skywater 130nm open source pdk.
 
-## Introduction of OPEN-SOURCE HARDWARE
-![image](https://user-images.githubusercontent.com/68396186/119715755-f70fd280-be81-11eb-8b5f-a12b945cf499.png)
+## Introduction Of OPEN-SOURCE HARDWARE And TOOLS
+With the introduction of open-source tools in the ASIC flow, now VLSI engineers have opportunity to design and craft their own ideas starting from RTL 2 GDSII. Moreover further inclusion of VLSI enthusiast and learners have propelled the need of open-source community for hardware also. Organizations such as:-
+  - open source hardware association 
+  - SiFive
+  - FOSSI
+  - OpenPOWER Foundation
+  - VSD
+  - RISCV
+  - Redwood EDA 
+  - Efabless etc
+
+are committed to bring revolution in the Silicon industry. 
+
+### RTL DESIGN AND SYNTHESIS USING SKYWATER130 PDK ###
+- - - -
+*I have categorized my work in day wise learning, according to the workshop.*
+- - - -
+__Table Of Contents__
+  1. Day 01 
+      1. Introduction to verilog RTL design and Synthesis
+          1. introduction to iverilog and gtkwave.
+          2. introduction to yosys.
+  2. Day 02
+  3. Day 03
+  4. Day 04
+  5. Day 05
+
+_ _ _ _
+**DAY01**
+#### Introduction to verilog RTL Design and Synthesis ####
+
+> RTL Design
+>> *It's a way of writng hdl code for digital design in a way to exploit the behavioral features offered by the language and also utilizing the structural description for design accuracy. So it's a trade off between behavioral constructs and structural description while writing hardware code.*        
 
 
-With the introduction of open-source tools in the ASIC flow now VLSI engineers have opportunity to design and craft their ideas starting from RTL 2 GDSII.  
-In this repository i have included RTL codes from very simple digital modules 
