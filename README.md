@@ -26,7 +26,7 @@ are committed to bring revolution in the Silicon industry.
 - - - -
 *I have categorized my work in day wise learning, according to the workshop.*
 - - - -
-__Table Of Contents__
+__Contents__
   1. Day 01 
       1. Introduction to verilog RTL design and Synthesis
           1. introduction to iverilog and gtkwave.
