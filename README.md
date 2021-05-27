@@ -25,38 +25,28 @@ are committed to bring revolution in the Silicon industry.
 - - - -
 *I have categorized my work in day wise learning, according to the workshop conducted by VSD.*
 - - - -
-__Contents__
-  1. Day 01 
-      1. Introduction to verilog RTL design and Synthesis
-          1. introduction to iverilog and gtkwave.
-          2. introduction to yosys.
-  2. Day 02
-  3. Day 03
-  4. Day 04
-  5. Day 05
-
 _ _ _ _
-## DAY01 ##
-#### Introduction to verilog RTL Design and Synthesis ####
+## DAY01
+### Introduction to verilog RTL design and Synthesis 
 
-> RTL Design
+>#### RTL_Design 
 >> *It's a way of writng hdl code for digital design in a way to exploit the behavioral features offered by the language and also utilizing the structural description for design accuracy. So it's a trade off between behavioral constructs and structural description while writing hardware code.*   
 
-> Synthesis
+>#### Synthesis
 >> *Translation and optimization of the RTL code into the gate level netlist. The synthesis tool(yosys) takes hdl code, liberty file(.lib) and design constraints to generate gate level netlist.*
 
-> Netlist
+>#### Netlist
 >> *Representation of the design in terms of actual standard cells and their connections.*
 
-> .lib
+>#### .lib
 >> *Liberty Timing file consist of timing and power parameters associated with standard cells specific to a particular technology node. Generally it includes definition of an inverter, nand2, nand3, nand4, nor2, nor3, nor4, aoi12, aoi22, oai12, oai22, mux, dff etc.*
 
 **NOTE**
 > Why Standard Cell library includes various(in terms of PPA) types of gate cells?
 >> In the digital circuit some combinational paths requires cells that are very fast in performance(but requires more area and power) and likewise some  combinational paths requires cells that are slower in performance(but better in terms of area and power). So adhering to the timing conditions, which standard  cells are to be used the decision is made. These decisions are written in constraint file and are passed to synthesis tool(yosys) for guided synthesis.     
 
-### Synthesis using yosys ###
-1. invoke yosys shell
+### Synthesis using yosys
+#### Invoke yosys shell
                
        $ yosys
 >> ![shubh_yosys_invoke](https://user-images.githubusercontent.com/68396186/119873243-f9396600-bf41-11eb-97c7-e27f6c993052.png)
@@ -64,16 +54,16 @@ _ _ _ _
 
     yosys>
    
-2. Now yosys shell is ready to take input....
-         
-       yosys> read_liberty -lib ../../path_to_the_standard_library_file.lib         // reading the liberty file.
-       yosys> read_verilog ../../path_to_verilog_file_that_is_to_be_synthesized.v   // reading the verilog file.
-       yosys> synth -top module_name                                                // the module name that is to be synthesized.
-       yosys> abc -liberty  ../../path_to_to_liberty_file.lib                       // netlist generation.
-       yosys> show                                                                  // a gui based representation of logic synthesized.
-       yosys> write_verilog file_name.v                                             // write the generated netlist to new a module/verilog
-                                                                                    // file for verification.
-                                                                                    
+#### Commands for synthesis using yosys
+ 
+        yosys> read_liberty -lib ../../path_to_the_standard_library_file.lib         // reading the liberty file.
+        yosys> read_verilog ../../path_to_verilog_file_that_is_to_be_synthesized.v   // reading the verilog file.
+        yosys> synth -top module_name                                                // the module name that is to be synthesized.
+        yosys> abc -liberty  ../../path_to_to_liberty_file.lib                       // netlist generation.
+        yosys> show                                                                  // a gui based representation of logic synthesized.
+        yosys> write_verilog file_name.v                                             // write the generated netlist to new a module/verilog
+                                                                                     // file for verification.
+#### Results                                                                                   
 > result of the command "yosys> synth -top module_name"
 >> ![shubh_synth_result](https://user-images.githubusercontent.com/68396186/119875101-00617380-bf44-11eb-8ebc-7f7950b76983.png)
 
