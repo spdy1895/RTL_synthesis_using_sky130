@@ -115,6 +115,9 @@ __NOTE__
 >>![netlist_generated](https://user-images.githubusercontent.com/68396186/119836746-98009b00-bf1f-11eb-8e10-f7685173bec7.png)
 
 
+- - - - 
+## Day 02
+__________
+### Timing libs, hierarchical vs flat synthesis and efficient flop coding styles
 
-
-
+#### Introduction to timing .libs
