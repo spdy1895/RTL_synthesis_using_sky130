@@ -243,7 +243,10 @@ more details can be found at [skywater-pdf](https://skywater-pdk.readthedocs.io/
         else if(sync_reset) q<= 1'b0;
         else                q<= d_in;
     end
->> 
+>> ![dff_asyncres_syncres_vcd](https://user-images.githubusercontent.com/68396186/120059288-300c9a80-c06e-11eb-8dd9-30387a6d52ad.png)
+>> ![asyncres_synres_show_abc](https://user-images.githubusercontent.com/68396186/120059297-461a5b00-c06e-11eb-9fe2-a95c94d12213.png)
+
+
 
 
 
