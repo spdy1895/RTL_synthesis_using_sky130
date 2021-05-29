@@ -39,6 +39,13 @@ __Table of Contents__
         * [Commands for synthesis using yosys](#commands-for-synthesis-using-yosys)
         * [Results](#results)
   * [Day 02](#day-02)
+    * [Timing library hierarchical vs flat synthesis and efficient flop coding styles](#timing-library-hierarchical-vs-flat-synthesis-and-efficient-flop-coding-styles)
+        * [Introduction to timing library](#introduction-to-timing-library)
+        * [Skywater foundary provided standard cell libraries](#skywater-foundary-provided-standard-cell-libraries)
+        * [Hierarchical vs Flat Synthesis](#hierarchical-vs-flat-synthesis)
+        * [Various Flip Flop coding styles and optimization](#various-flip-flop-coding-styles-and-optimization)
+
+  * [Day 03](#day-03)
 _ _ _ _
 ## DAY 01
 ### Introduction to verilog RTL design and synthesis 
@@ -117,10 +124,10 @@ __NOTE__
 
 - - - - 
 ## Day 02
-### Timing libs, hierarchical vs flat synthesis and efficient flop coding styles
-
-#### Introduction to timing .libs
+### Timing library hierarchical vs flat synthesis and efficient flop coding styles
 - - - -
+#### Introduction to timing library
+
 >> ![skywater-pdk-logo](https://user-images.githubusercontent.com/68396186/120022278-cfe40d00-c009-11eb-95d2-40494dc9dd90.png)
 >>> **sky130_fd_sc_hd_tt_025C_1v80.lib** 
 >>>> the liberty timing file(.lib) is an ASCII file consists of detailed information of timing and power parameters about any standard cell of a particular technology node. The parameters are  affected by PVT variations (process, voltage, temperature). These variations are factorized while designing IC. So the Standard Cell library is characterized to model these variations. The feature size in this technology node is 130nm. The terms in the .lib file are:-
@@ -150,7 +157,7 @@ Build Space(Flash, SRAM, etc)  |       sp
 IO and Periphery               |       io
 High Densiry                   |       hd
   
-#### SkyWater Foundry Provided Standard Cell Libraries
+#### Skywater foundary provided standard cell libraries
 
 - sky130_fd_sc_hd - High Density Standard Cell Library.
 - sky130_fd_sc_hdll - High Density, Low Leakage Standard Cell Library.
@@ -218,8 +225,8 @@ more details can be found at [skywater-pdf](https://skywater-pdk.readthedocs.io/
 
 > *asynchronous reset dff*
 
-    always@(posedge clk or posedge async_resset) begin 
-        if(async_resset)  q<= 1'b0;
+    always@(posedge clk or posedge async_reset) begin 
+        if(async_reset)  q<= 1'b0;
         else              q<= d_in;
     end
 >> ![async_rst_01](https://user-images.githubusercontent.com/68396186/120044025-a8516c80-c02a-11eb-946b-0112343fffaf.png)
@@ -245,6 +252,28 @@ more details can be found at [skywater-pdf](https://skywater-pdk.readthedocs.io/
     end
 >> ![dff_asyncres_syncres_vcd](https://user-images.githubusercontent.com/68396186/120059288-300c9a80-c06e-11eb-8dd9-30387a6d52ad.png)
 >> ![asyncres_synres_show_abc](https://user-images.githubusercontent.com/68396186/120059297-461a5b00-c06e-11eb-9fe2-a95c94d12213.png)
+
+
+> *synchronous reset dff*
+
+    always@(posedge clk) beign
+        if(sync_reset)  q<= 1'b0;
+        else            q<= d_in;
+     end
+>> ![syncres_waveform](https://user-images.githubusercontent.com/68396186/120065028-e7b0a500-c08c-11eb-890c-355cdb9bac3a.png)
+>> ![dff_synres_show](https://user-images.githubusercontent.com/68396186/120065073-1cbcf780-c08d-11eb-9d09-271adad9941e.png)
+
+__Note__
+
+* Asynchronous reset pin is directly synthesized on the flip flop.
+* Synchronous reset signal is passed through a combinational logic to the flip flop. 
+
+
+
+- - - -
+## Day 03
+### Combinational and Sequential Optimization
+- - - -
 
 
 
