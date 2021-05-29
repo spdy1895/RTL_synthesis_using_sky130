@@ -41,7 +41,7 @@ __Table of Contents__
   * [Day 02](#day-02)
     * [Timing library hierarchical vs flat synthesis and efficient flop coding styles](#timing-library-hierarchical-vs-flat-synthesis-and-efficient-flop-coding-styles)
         * [Introduction to timing library](#introduction-to-timing-library)
-        * [Skywater foundary provided standard cell libraries](#skywater-foundary-provided-standard-cell-libraries)
+        * [Skywater Foundary provided standard cell libraries](#skywater-foundary-provided-standard-cell-libraries)
         * [Hierarchical vs Flat Synthesis](#hierarchical-vs-flat-synthesis)
         * [Various Flip Flop coding styles and optimization](#various-flip-flop-coding-styles-and-optimization)
 
@@ -157,7 +157,7 @@ Build Space(Flash, SRAM, etc)  |       sp
 IO and Periphery               |       io
 High Densiry                   |       hd
   
-#### Skywater foundary provided standard cell libraries
+#### Skywater Foundary provided standard cell libraries
 
 - sky130_fd_sc_hd - High Density Standard Cell Library.
 - sky130_fd_sc_hdll - High Density, Low Leakage Standard Cell Library.
