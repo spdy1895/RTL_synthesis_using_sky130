@@ -310,7 +310,44 @@ __Note__
 ## Day 03
 ### Combinational and Sequential Optimization
 - - - -
-#### 
+#### Introduction to optimizations
+>> command to perform optimization
+    
+    $ yosys > opt_clean -purge        // all optimizations are done with this
+
+
+#### Combinational logic optimization
+>* case 1
+
+    module opt_check(                             
+    
+      output wire y,
+      input wire a,
+      input wire b
+    );
+        assign y= a ? b : 0;
+    endmodule
+
+>>* expected optimization by tool.
+>>> ![opt1_theory](https://user-images.githubusercontent.com/68396186/120073594-9c12f100-c0b6-11eb-83a1-0bae70efdb03.jpg)
+>>* result obtained.
+>>> ![opt1_show](https://user-images.githubusercontent.com/68396186/120073616-c2389100-c0b6-11eb-8f3c-0f3a33530c84.png)
+
+
+
+>* Case 2
+
+    module opt_check(
+      output wire y,
+      input wire a,
+      input wire b
+    );
+        assign y= a ? 1 : b;
+    endmodule
+>>* expected optimization by tool.
+>>> ![opt2_theory](https://user-images.githubusercontent.com/68396186/120073637-d7adbb00-c0b6-11eb-80eb-3d9027af3834.jpg)
+>>* result obtained.
+>>> ![opt2_show](https://user-images.githubusercontent.com/68396186/120073644-e1372300-c0b6-11eb-9af4-09e5b5ff965d.png)
 
 
 
