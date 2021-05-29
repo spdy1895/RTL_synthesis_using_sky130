@@ -44,6 +44,7 @@ __Table of Contents__
         * [Skywater Foundary provided standard cell libraries](#skywater-foundary-provided-standard-cell-libraries)
         * [Hierarchical vs Flat Synthesis](#hierarchical-vs-flat-synthesis)
         * [Various Flip Flop coding styles and optimization](#various-flip-flop-coding-styles-and-optimization)
+        * [Optimization in constant multiplier circuit](#optimization-in-constant-multiplier-circuit)
 
   * [Day 03](#day-03)
 _ _ _ _
@@ -268,13 +269,48 @@ __Note__
 * Asynchronous reset pin is directly synthesized on the flip flop.
 * Synchronous reset signal is passed through a combinational logic to the flip flop. 
 
+#### Optimization in constant multiplier circuit
+    module mul2(
+      output wire y[3:0],
+      input wire in[2:0]
+    );
+        assign y= a * 2;
+    endmodule
+    // there is an interesting optimiztion taking place here instead of generating any hardware for the logic.
+    
+__Note__
+* there are only wire components in the circuit. Also note the comment by the synthesis tool(yosys) while mapping.
+>> ![mult2_abc](https://user-images.githubusercontent.com/68396186/120066491-53e2d700-c094-11eb-8193-66ec935f6e18.png)
+>> * netlist
+>> ![mult2_netlist](https://user-images.githubusercontent.com/68396186/120066553-bfc53f80-c094-11eb-8216-21c8adacdb49.png)
+>> * logical description
+>> ![mult2_show](https://user-images.githubusercontent.com/68396186/120066569-ceabf200-c094-11eb-88ef-3516e4b9d3c6.png)
+
+##### Similar optimization
+    module mul8(
+        output wire y[5:0],
+        input wire in[2:0]
+        );
+            assign y= a * 9;
+    endmodule
+    
+__Note__
+* here replication of input takes place.
+>> ![mult8_abc_response](https://user-images.githubusercontent.com/68396186/120066905-6c53f100-c096-11eb-813f-253595a0559e.png)
+>> * netlist
+>> ![mult8_netlist](https://user-images.githubusercontent.com/68396186/120066923-842b7500-c096-11eb-8869-53105d92d581.png)
+>> * logical description
+>> ![mult8_show](https://user-images.githubusercontent.com/68396186/120066939-95748180-c096-11eb-9c02-dd69d1722cd0.png)
+
+
+
 
 
 - - - -
 ## Day 03
 ### Combinational and Sequential Optimization
 - - - -
-
+#### 
 
 
 
