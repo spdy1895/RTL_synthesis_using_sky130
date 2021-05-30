@@ -47,6 +47,26 @@ __Table of Contents__
         * [Optimization in constant multiplier circuit](#optimization-in-constant-multiplier-circuit)
 
   * [Day 03](#day-03)
+    * [Combinational and Sequential optimization](#combinational-and-sequential-optimization)
+        * [Introduction to optimization](#introduction-to-optimization)
+        * [Combinational logic optimization](#combinational-logic-optimization)
+        	* [Multiple module optimization](#multiple-module-optimization)
+      	* [Sequential logic optimization](#sequential-logic-optimization)
+      	* [Sequential optimization for unused outputs](#sequential-optimization-for-unused-outputs)
+
+   * [Day 04](#day-04)
+     * [GLS, blocking vs non-blocking and synthesis-simulation mismatch](#gls-blocking-vs-non-blocking-and-synthesis-simulation-mismatch)
+
+   * [Day 05](#day-05)
+     * [If case, for loop and for generate](#if-case-for-loop-and-for-generate) 
+
+
+
+
+
+
+
+
 _ _ _ _
 ## DAY 01
 ### Introduction to verilog RTL design and synthesis 
@@ -308,9 +328,9 @@ __Note__
 
 - - - -
 ## Day 03
-### Combinational and Sequential Optimization
+### Combinational and Sequential optimization
 - - - -
-#### Introduction to optimizations
+#### Introduction to optimization
 >> command to perform optimization
     
     $ yosys > opt_clean -purge        // all optimizations are done with this
@@ -384,14 +404,14 @@ __Note__
 
 
 
-#### Multiple Module Optimization
+#### Multiple module optimization
 __Note__
 > before running optimization command, first flatten the design.
       
-    $ yosys > synth -top /path_to_.lib              // synthesizing the top module
-    $ yosys > abc -liberty /path_to_.lib            // mapping into the liberty file standard cells
+    $ yosys > synth -top module_name              // synthesizing the top module
     $ yosys > flatten                               // flattening the entire design and removing the hierarchy
     $ yosys > opt_clean -purge                      // running optimization
+    $ yosys > abc -liberty /path_to_.lib            // mapping into the liberty file standard cells
     $ yosys > write_verilog file.v                  // writing netlist
 
     
@@ -444,9 +464,11 @@ __Note__
 >> expected optimization by tool.
 
 >> result obtained after optimization.
->>> ![multiple_mod_opt2_show](https://user-images.githubusercontent.com/68396186/120084444-d055d400-c0ed-11eb-8bdb-882d33ae1c15.png)
+>>> ![multiple_module_opt2_show](https://user-images.githubusercontent.com/68396186/120115120-ea4fef00-c19f-11eb-88e9-55b298c7f089.png)
+
 >> netlist of the optimized design.
->>> ![multiple_mod_opt2_netlist](https://user-images.githubusercontent.com/68396186/120084454-e4013a80-c0ed-11eb-985f-8f8ce117db7e.png)
+>>> ![multiple_module_opt2_newopt_netlist](https://user-images.githubusercontent.com/68396186/120115143-ff2c8280-c19f-11eb-9b0e-4b9d827f1f5e.png)
+
 
 
 
@@ -575,7 +597,7 @@ __Note__
 >> result after optimization.
 >>> ![dff_const5_show](https://user-images.githubusercontent.com/68396186/120087933-be822a00-c109-11eb-9095-7df0d8bbff0f.png)
 
-#### Sequential optimization unused ouputs
+#### Sequential optimization for unused outputs
 
 >* Case 1 : 3 bit up-counter
 
@@ -600,8 +622,38 @@ __Note__
 
 
 
+>* Case 2 : 3 bit up-counter
+
+
+	module counter_opt(
+	  output reg q,
+      	  wire clk,
+      	  wire reset
+    	);
+            reg [2:0] count;
+            assign q= (count[2:0]== 3'b000);
+        
+              always@(posedge clk or posege reset) begin
+                if(reset)  count< =3'b000;
+                 else      count<= count + 1;
+               end
+    	endmodule
+>> statistics after synth command.
+>>> ![counter_opt_3_synth](https://user-images.githubusercontent.com/68396186/120115360-f5efe580-c1a0-11eb-84dc-18bb49eca3ce.png)
+
+>> result after optimization.
+>>> ![counter_opt_3_show](https://user-images.githubusercontent.com/68396186/120115375-030cd480-c1a1-11eb-8d1e-f6f33bebb629.png)
 
 
 
 
+- - - -
+## Day 04
+### GLS, blocking vs non-blocking and synthesis-simulation mismatch
+- - - -
 
+
+- - - -
+## Day 05
+### If, case, for loop and for generate
+- - - -
