@@ -56,11 +56,23 @@ __Table of Contents__
 
   * [Day 04](#day-04)
     * [GLS, blocking vs non-blocking and synthesis-simulation mismatch](#gls-blocking-vs-non-blocking-and-synthesis-simulation-mismatch)
-     	* [Comparing RTL simulation and Gate level simulaiton](#comparing-rtl-simulation-and-gate-level-simulation)
-     	* [Synthesis-Simulation mismatch](#synthesis-simulation-mismatch) 
+        * [Comparing RTL simulation and Gate level simulaiton](#comparing-rtl-simulation-and-gate-level-simulation)
+        * [Synthesis-Simulation mismatch](#synthesis-simulation-mismatch) 
+        
+  * [Day 05](#day-05)
+    * [If, case, for loop and for generate](#if-case-for-loop-and-for-generate)
+        * [incomplete "if" constructs](#incomplete-if-constructs)
+        * [incomplete "case" constructs](#incomplete-case-constructs)
+        * [complete "case" constructs](#complete-case-constructs)
+        * [partial "case" constructs](#partial-case-constructs)
+        * [bad "case" constructs](#bad-case-constructs)
+    * [generate constructs](#generate-constructs)
+        * [mux using for loop inside always block](#mux-using-for-loop-inside-always-block)
+        * [demux using case inside always block](#demux-using-case-inside-always-block)
+        * [for inside generate block](#for-inside-generate-block) 
 
-   * [Day 05](#day-05)
-     * [If case, for loop and for generate](#if-case-for-loop-and-for-generate) 
+
+
 
 
 
@@ -719,3 +731,326 @@ __Gate level simulation__
 ## Day 05
 ### If, case, for loop and for generate
 - - - -
+
+#### incomplete "if" constructs 
+* case 1:
+	
+	module incomp_if(
+	   output reg y,
+	   input wire i0,
+	   input wire i1,
+	   input wire i2,
+	   );
+	   
+	   always@(*) begin
+	   	if(i0) y<= i1;
+	   end
+	endmodule
+>> statistics after synth command.
+>>> ![incomplete_if_synth](https://user-images.githubusercontent.com/68396186/120119639-71a85d00-c1b6-11eb-9bbf-e495191f7ad1.png)
+
+>> logical description.
+>>> ![incomplete_if_show](https://user-images.githubusercontent.com/68396186/120119650-7ec54c00-c1b6-11eb-8fe4-1a0051c8ca90.png)
+
+>> RTL simulation.
+>>> ![incomplete_if_rtl_waveform](https://user-images.githubusercontent.com/68396186/120119665-88e74a80-c1b6-11eb-8446-bb7480f37355.png)
+
+* case 2:
+	
+	  module incomp_if2(
+		output reg y,
+		input wire i0,
+		input wire i1,
+		input wire i2,
+		input wire i3
+		);
+		
+		always@(*) begin
+			if(i0)  y<= i1;
+			else if y<= i3;
+		end
+	  endmodule
+>> statistics after synth command.
+>>> ![incomple_if2_synth](https://user-images.githubusercontent.com/68396186/120119762-3195aa00-c1b7-11eb-8786-ed350a01e046.png)
+
+>> logical description.
+>>> ![incomplete_if2_show](https://user-images.githubusercontent.com/68396186/120119773-3f4b2f80-c1b7-11eb-9543-e4ea126bc5ca.png)
+
+>> RTL simulation.
+>>> ![incomplete_if2_rtl_waveform2](https://user-images.githubusercontent.com/68396186/120119786-4eca7880-c1b7-11eb-8a70-5c364754f4b6.png)
+
+
+
+#### incomplete "case" constructs
+
+	module incomp_case(
+		output reg y,
+		input wire i0,
+		input wire i1,
+		input wire i2,
+		input wire [1:0] sel
+		);
+		
+		always@(*) begin
+			case(sel)
+				2'b00: y= i0;
+				2'b01: y= i1;
+			endcase
+		end
+	endmodule
+
+>> statistics after synth command.
+>>> ![incomplete_case_synth](https://user-images.githubusercontent.com/68396186/120119923-f182f700-c1b7-11eb-9c59-b6be7bb6f157.png)
+
+>> logical description.
+>>> ![incomplete_case_show](https://user-images.githubusercontent.com/68396186/120119935-0069a980-c1b8-11eb-8df0-06c4cf51c95a.png)
+
+>> RTL simulation.
+>>> ![incomplete_case_rtl_waveform](https://user-images.githubusercontent.com/68396186/120119944-0cee0200-c1b8-11eb-8867-6e3948ca4437.png)
+
+
+
+
+#### complete "case" constructs 
+
+	module comp_case(
+		output reg y,
+		input wire i0,
+		input wire i1,
+		input wire i2,
+		input wire [1:0] sel
+		);
+		
+		always@(*) begin
+			case(sel)
+				2'b00:     y= i0;
+				2'b01: 	   y= i1;
+				default:   y= i2;
+			endcase
+		end
+	endmodule
+
+>> statistics after synth command.
+>>> ![complete_case_synth](https://user-images.githubusercontent.com/68396186/120120047-a3222800-c1b8-11eb-87a1-5ff2da5023a9.png)
+
+>> logical description.
+>>> ![complete_case_show](https://user-images.githubusercontent.com/68396186/120120064-b03f1700-c1b8-11eb-9df8-0abb79f63aaa.png)
+
+>> RTL simulation.
+>>> ![complete_casse_rtl_waveform](https://user-images.githubusercontent.com/68396186/120120079-bc2ad900-c1b8-11eb-849a-dad764cd0605.png)
+
+
+
+
+#### partial "case" constructs 
+
+	module partial_case_assign(
+		output reg y,
+		output reg x,
+		input wire i0,
+		input wire i1,
+		input wire i2,
+		input wire [1:0] sel
+		);
+			always@(*) begin
+				case(sel)
+					2'b00: begin
+						y= i0;
+						x= i2;
+						end
+					2'b01: y= i1;
+					default: begin
+						x= i1;
+						y= i2;
+						end
+				endcase
+			end
+		endmodule
+>> statistics after synth command.
+>>> ![partial_case_synth](https://user-images.githubusercontent.com/68396186/120120431-c6e66d80-c1ba-11eb-9996-c3dc496bbf21.png)
+
+>> logical description.
+>>> ![partial_case_show](https://user-images.githubusercontent.com/68396186/120120441-d9f93d80-c1ba-11eb-8d2b-f1a35d09fa48.png)
+
+		
+	
+
+
+#### bad "case" constructs 
+
+
+	module bad_case(
+		output reg y,
+		input wire i0,
+		input wire i1,
+		input wire i2,
+		input wire i3,
+		input wire [1:0] sel
+		);
+		
+		always@(*) begin
+			case(sel)
+				2'b00: y= i0;
+				2'b01: y= i1;
+				2'b10: y= i2;
+				2'b1?: y= i3;
+			endcase
+		end
+	enmodule
+	
+>> statistics after synth command.
+>>> ![bad_case_synth](https://user-images.githubusercontent.com/68396186/120120533-78859e80-c1bb-11eb-9ef9-a8350c2c35bf.png)
+
+>> logical description.
+>>> ![bad_case_show](https://user-images.githubusercontent.com/68396186/120120543-83d8ca00-c1bb-11eb-9552-d9f53769de3f.png)
+
+>> RTL simulaiton
+>>> ![bad_case_rtl_waveform](https://user-images.githubusercontent.com/68396186/120120551-94894000-c1bb-11eb-96cb-3387433275aa.png)
+
+>> Gate level simulation.
+>> ![bad_case_gls_waveform](https://user-images.githubusercontent.com/68396186/120120568-a79c1000-c1bb-11eb-9af7-a4ee0bbfcd85.png)
+
+
+
+
+### generate constructs
+#### mux using for loop inside always block
+
+	module mux_generate(
+		output reg y,
+		input wire i0,
+		input wire i1,
+		input wire i2,
+		input wire i3,
+		input wire [1:0] sel
+		);
+		
+		wire [3:0] i_int;
+		assign i_int= {i3, i2, i1, i0};
+		intege k;
+		always@(*) begin
+			for(k=0; k< 4; k= k+1) begin
+				if(k == sel) y= i_int[k];
+			end
+		end
+	endmodule
+>> statistics after synth command.
+>>> ![mux_generate_synth](https://user-images.githubusercontent.com/68396186/120120699-9b648280-c1bc-11eb-8d4d-f11680afd5b0.png)
+
+>> logical description.
+>>> ![generate_mux_show](https://user-images.githubusercontent.com/68396186/120120704-a9b29e80-c1bc-11eb-91ab-da62c10c120b.png)
+
+>> RTl simulation.
+>>> ![mux_generate_rtl_waveform](https://user-images.githubusercontent.com/68396186/120120715-b931e780-c1bc-11eb-8e3c-0632f3436bb1.png)
+
+
+	
+#### demux using case inside always block
+	
+	module demux_case(
+		output wire o0,
+		output wire o1,
+		output wire o2,
+		output wire o3,
+		output wire o4,
+		output wire o5,
+		output wire o6,
+		output wire o7,
+		input wire i
+		);
+		
+		reg [7:0] y_int;
+		assign {o7, o6, o5, o4, o3, o2, o1, o0}= y_int;
+		intege k;
+		always@(*) begin
+			y_int= 8'b0;
+			case(sel)
+				3'b000: y_int[0]= i;
+				3'b001: y_int[1]= i;
+				3'b010: y_int[2]= i;
+				3'b011: y_int[3]= i;
+				3'b100: y_int[4]= i;
+				3'b101: y_int[5]= i;
+				3'b110: y_int[6]= i;
+				3'b111: y_int[7]= i;
+			endcase
+		end
+	endmodule
+	
+>> statistics after synth command.
+>>> ![demux_case_synth](https://user-images.githubusercontent.com/68396186/120121000-c223b880-c1be-11eb-8414-8abd73edba36.png)
+
+>> logical description.
+>>> ![demux_case_show](https://user-images.githubusercontent.com/68396186/120121014-cfd93e00-c1be-11eb-839b-bd7c246838e0.png)
+
+>> RTL simulation.
+>>> ![demux_case_rtl](https://user-images.githubusercontent.com/68396186/120121020-dc5d9680-c1be-11eb-8f0c-b15ddb01bb92.png)
+
+>> Gate level simulation.
+>>> ![demux_case_gls](https://user-images.githubusercontent.com/68396186/120121067-0dd66200-c1bf-11eb-8f91-18d42de163ca.png)
+
+
+#### for inside generate block
+		
+	module fa(
+		output wire sum,
+		output wire co,
+		input wire a,
+		input wire b,
+		input wire c,
+		);
+		assign {co, sum}= a + b + c;
+	endmodule
+	
+	module rca(
+		output [8:0] sum,
+		input wire [7:0] num1,
+		input wire [7:0] num2,
+		);
+		
+		wire [7:0] int_sum;
+		wire [7:0] int_co;
+		
+		genvar i;
+		generate
+			for(i= 1: i<8; i= i+1) begin
+				fa u_fa_1(
+					.a(num1[i]),
+					.b(num2[i]),
+					.c(int_co[i-1]),
+					.sum(int_sum[i])
+					);
+			end
+		endgenerate
+		
+		fa u_fa_0 (
+			.a(num1[0]),
+			.b(num2[0]),
+			.c(1'b0),
+			.co(int_co[0]),
+			.sum(int_sum[0])
+		);
+		
+		assign sum[7:0] = int_sum;
+		assign sum[8]= int_co[7];
+	endmodule
+		
+
+>> statistics after synth command.
+>>> ![rca_synth](https://user-images.githubusercontent.com/68396186/120121392-cea91080-c1c0-11eb-8201-d06e31075775.png)
+
+>> logical description.
+>>> ![show_rca_fa](https://user-images.githubusercontent.com/68396186/120121421-f26c5680-c1c0-11eb-93cc-616a71bb603c.png)
+>>> ![show_fa](https://user-images.githubusercontent.com/68396186/120121473-48d99500-c1c1-11eb-97a1-bc7850dcb320.png)
+
+
+>> RTL simulation.
+>>> ![for_rca_rtl_waveform](https://user-images.githubusercontent.com/68396186/120121435-12037f00-c1c1-11eb-954a-922f8ca70083.png)
+
+>> Gate level simulation.
+>>> ![rca_netlist_gls](https://user-images.githubusercontent.com/68396186/120121456-31021100-c1c1-11eb-8263-45106d2d2abf.png)
+
+
+
+
+
