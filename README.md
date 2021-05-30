@@ -314,6 +314,7 @@ __Note__
 >> command to perform optimization
     
     $ yosys > opt_clean -purge        // all optimizations are done with this
+                                      // enter this command after "synth"
 
 
 #### Combinational logic optimization
@@ -337,7 +338,7 @@ __Note__
 
 >* Case 2
 
-    module opt_check(
+    module opt_check2(
       output wire y,
       input wire a,
       input wire b
@@ -348,6 +349,254 @@ __Note__
 >>> ![opt2_theory](https://user-images.githubusercontent.com/68396186/120073637-d7adbb00-c0b6-11eb-80eb-3d9027af3834.jpg)
 >>* result obtained.
 >>> ![opt2_show](https://user-images.githubusercontent.com/68396186/120073644-e1372300-c0b6-11eb-9af4-09e5b5ff965d.png)
+
+
+>* Case 3
+
+    module opt_check3(
+      output wire y,
+      input wire a,
+      input wire b,
+      input wire c
+    );
+      assign y= a ? ( C ? b : 0 ) : 0;
+    endmodule
+>>* expected optmization by tool.
+
+>>* result obtained.
+>>> ![opt_check3_show](https://user-images.githubusercontent.com/68396186/120082459-dee9be80-c0e0-11eb-8ab7-154cdfacaa37.png)
+
+
+>* Case 4
+
+    module opt_check4(
+      output wire y,
+      input wire a,
+      input wire b,
+      input wire c
+    );
+        assign y= a ? ( b ? ( a & c ) : c ) : ( !c );
+    endmodule
+>>* expected optimization by tool.
+
+>> result obtained.
+>>> ![opt_check4](https://user-images.githubusercontent.com/68396186/120082644-ae565480-c0e1-11eb-8ac9-54a54e473578.png)
+
+
+
+#### Multiple Module Optimization
+__Note__
+> before running optimization command, first flatten the design.
+      
+    $ yosys > synth -top /path_to_.lib              // synthesizing the top module
+    $ yosys > abc -liberty /path_to_.lib            // mapping into the liberty file standard cells
+    $ yosys > flatten                               // flattening the entire design and removing the hierarchy
+    $ yosys > opt_clean -purge                      // running optimization
+    $ yosys > write_verilog file.v                  // writing netlist
+
+    
+    
+>* Case 5
+
+    module sub_module1(input a , input b , output y);
+      assign y = a & b;
+    endmodule
+
+
+    module sub_module2(input a , input b , output y);
+      assign y = a^b;
+    endmodule
+
+
+    module multiple_module_opt(input a , input b , input c , input d , output y);
+      wire n1,n2,n3;
+
+      sub_module1 U1 (.a(a) , .b(1'b1) , .y(n1));
+      sub_module2 U2 (.a(n1), .b(1'b0) , .y(n2));
+      sub_module2 U3 (.a(b), .b(d) , .y(n3));
+
+      assign y = c | (b & n1); 
+
+
+    endmodule
+>> expected optimization by tool.
+>>>
+>> result obtained after optimization.
+>>> ![multiple_module_opt1](https://user-images.githubusercontent.com/68396186/120084058-d0a0a000-c0ea-11eb-9c1d-f46d3f20e1ff.png)
+>> netlist of the optimized design.
+>>> ![multiple_module_opt_netlist](https://user-images.githubusercontent.com/68396186/120084177-cb902080-c0eb-11eb-99ca-787af1a9174a.png)
+
+
+>* Case 6
+
+    module sub_module(input a , input b , output y);
+      assign y = a & b;
+    endmodule
+
+    module multiple_module_opt2(input a , input b , input c , input d , output y);
+      wire n1,n2,n3;
+
+        sub_module U1 (.a(a) , .b(1'b0) , .y(n1));
+        sub_module U2 (.a(b), .b(c) , .y(n2));
+        sub_module U3 (.a(n2), .b(d) , .y(n3));
+        sub_module U4 (.a(n3), .b(n1) , .y(y));
+    endmodule
+>> expected optimization by tool.
+
+>> result obtained after optimization.
+>>> ![multiple_mod_opt2_show](https://user-images.githubusercontent.com/68396186/120084444-d055d400-c0ed-11eb-8bdb-882d33ae1c15.png)
+>> netlist of the optimized design.
+>>> ![multiple_mod_opt2_netlist](https://user-images.githubusercontent.com/68396186/120084454-e4013a80-c0ed-11eb-985f-8f8ce117db7e.png)
+
+
+
+#### Sequential logic optimization
+>* Case 1
+
+    module dff_const1(
+      output reg q,
+      input wire clk,
+      input wire reset
+    );
+      always @(posedge clk or posedge reset)
+        begin
+	        if(reset)
+		          q <= 1'b0;
+	        else
+		          q <= 1'b1;
+        end
+    endmodule
+    
+>> statistics after synth command.
+>>> ![dff_const1_synth](https://user-images.githubusercontent.com/68396186/120086869-5c70f700-c100-11eb-8e6c-6e7c0f803493.png)
+
+>> result after optmization.
+>>> ![dff_const1_show](https://user-images.githubusercontent.com/68396186/120086854-4105ec00-c100-11eb-80a3-6bfeaaea7dc0.png)
+
+
+>* Case 2
+
+    module dff_const2(
+      output reg q,
+      input wire clk,
+      input wire reset
+    );
+    
+    always@(posdge clk or posedge reset) begin
+        if(reset) q<= 1'b1;
+        else      q<= 1'b1;
+    end
+    endmodule
+    
+>> statistics after synth command.
+>>> ![dff_const2_synth](https://user-images.githubusercontent.com/68396186/120086907-d2755e00-c100-11eb-8093-8cc67bc814ba.png)
+
+>> result after optimization.
+>>> ![dff_const2_show](https://user-images.githubusercontent.com/68396186/120086918-f2a51d00-c100-11eb-8d83-104a87691f15.png)
+
+
+>* Case 3
+
+    module dff_const3(
+      output reg q,
+      input wire clk,
+      input wire reset
+      );
+        reg q1;
+        
+        always@(posedge clk or posedge reset) begin
+        if(reset) begin
+                q<= 1'b1;
+                q1<= 1'b0;
+        end
+        else begin
+              q1<= 1'b1;
+              q<= q1;
+        end
+        end
+        endmodule
+        
+>> statistics after synth command.
+>>> ![dff_const3_synth](https://user-images.githubusercontent.com/68396186/120087351-b1167100-c104-11eb-9723-2a3c9eefc1f4.png)
+
+>> result after optimization.
+>>> ![dff_const3_show](https://user-images.githubusercontent.com/68396186/120087360-c5f30480-c104-11eb-873a-84142a17559d.png)
+
+
+>* Case 4
+
+    module dff_const4(
+      output reg q,
+      input wire clk,
+      input wire reset
+      );
+      reg q1;
+        always@(posedge clk or posedge reset) begin
+          if(reset) begin
+            q<= 1'b1;
+            q1<= 1'b1;
+          end
+        else begin
+            q1<= 1'b1;
+            q<= q1;
+          end
+        end
+    endmodule
+>> statistics after synth command.
+>>> ![dff_const4_synth](https://user-images.githubusercontent.com/68396186/120087695-bde89400-c107-11eb-8a44-f4dffc36fdc2.png)
+
+>> result after optimization.
+>>> ![dff_const4_show](https://user-images.githubusercontent.com/68396186/120087699-cd67dd00-c107-11eb-9e4c-3029e7bdff7b.png)
+
+
+>* Case 5
+    
+    module dff_const5(
+      output reg q,
+      input wire clk,
+      input wire reset
+      );
+        reg q1;
+        always@(posedge clk or posedge reset) begin
+            if(reset) begin
+                q<= 1'b0;
+                q1<= 1'b0;
+                end
+             else begin
+                q1<= 1'b1;
+                q<= q1;
+                end
+         end
+    endmodule
+    
+>> statistics after synth command.
+>>> ![dff_const5_synth](https://user-images.githubusercontent.com/68396186/120087928-aad6c380-c109-11eb-8215-1aeb001175bb.png)
+
+>> result after optimization.
+>>> ![dff_const5_show](https://user-images.githubusercontent.com/68396186/120087933-be822a00-c109-11eb-9095-7df0d8bbff0f.png)
+
+#### Sequential optimization unused ouputs
+
+>* Case 1 : 3 bit up-counter
+
+    module counter_opt(
+      output reg q,
+      input wire clk,
+      input wire reset
+    );
+        reg [2:0] count;
+        assign q= count[0];
+        
+          always@(posedge clk or posege reset) begin
+            if(reset) count< =3'b000;
+            else      count<= count + 1;
+          end
+    endmodule
+>> statistics after synth command.
+>>> ![counter_opt1_synth](https://user-images.githubusercontent.com/68396186/120088231-3bae9e80-c10c-11eb-95ed-4219902684be.png)
+
+>> result after optimization.
+>>> ![counter_opt1_show](https://user-images.githubusercontent.com/68396186/120088256-5ed94e00-c10c-11eb-95be-9f169796a37d.png)
 
 
 
